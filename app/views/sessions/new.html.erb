@@ -1,0 +1,20 @@
+
+
+<%= form_tag sessions_path do %>
+<table style="width:30%;height:100%" align="center">
+ <tr><td colspan="2" align="center"><i><h1>Login</h1></i></td></tr>
+
+  <tr><td align="center" style="color:blue;font-size:100%;width:50%">
+    <i><%= label_tag :login, "Email Address" %></i></td>
+    <td><%= text_field_tag :login, params[:login], placeholder: "Enter the email address" %></td>
+  </tr>
+
+ <tr><td align="center" style="color:blue;font-size:100%;width:50%">
+    <i><%= label_tag :password %></i></td>
+   <td> <%= password_field_tag :password ,"",placeholder: "Enter the password" %></td>
+  </tr>
+
+  <tr><td align="center" colspan="2"><%= submit_tag "Log in" %></td></tr>
+  </table>
+<% end %>
+<p align="center"style="font-size:200%;">Don't have an account? <%= link_to "Sign up!", signup_path %></p>

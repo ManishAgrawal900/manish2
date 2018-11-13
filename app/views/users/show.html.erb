@@ -1,0 +1,139 @@
+<h1 style="color:black">Welcome  <%= @user.name %></h1>
+
+ <p align ='right'style="color:black;font-size:200%;"><%= link_to 'logout',destroy_path %> &nbsp;&nbsp;&nbsp;
+
+<h3 align="center" style="color:black">
+  <strong >Name:</strong>
+  <%= @user.name %>
+</h3>
+
+<h3 align="center" style="color:black">
+  <strong>Email:</strong>
+  <%= @user.email %>
+</h3>
+
+
+ <p><b style="color:purple">service is pending:</b> <% @user.joins.where(status: 0).each do |a| %>   
+      <%=  Service.find(a.service_id).name %> <% end %> 
+ </p>
+
+ <p><b style="color:purple">service is reject by vendor:</b> <% @user.joins.where(status: 2).each do |a| %>   
+      <%=  Service.find(a.service_id).name %> <% a.destroy %> <% end %> 
+ </p>
+
+
+
+<table border="1" cellspacing="0" style="width:30%;height:100%" align="center">
+  <tr> 
+    <td colspan="4" style="color:black" align="center" >Select Services</td>
+
+  </tr>
+  
+   <tr>
+     
+      <td align="center" style="color:purple">service name</td>
+      <td align="center" style="color:purple">vendor name</td>
+      <td align="center" style="color:purple"> created_at</td>
+      <td align="center" style="color:purple"> price</td>
+
+
+
+    </tr>
+     
+   <tr>
+    
+    <% @user.joins.where(status:1).each do |a| %>
+     
+     
+  
+        
+        <td align="center"><%= a.service.name %></td>
+       <td align="center"><%= a.service.Vendor.name %></td>
+        <td align="center"><%= a.created_at.to_datetime.localtime.strftime("%d-%m-%Y at %T") %></td>
+       <td align="center"><%= a.service.price %></td> 
+        
+    </tr>
+
+    <% end %>
+
+
+
+    
+   
+     <% @user.joins.where(status:1).each do |a| %>
+         <% if a.service.coupan.date > a.created_at %>
+         <% if a.statuss == true %>
+              <tr>
+                <td align='right' colspan='3' style="color:purple">Discount for <%= a.service.name%>&nbsp;&nbsp;&nbsp;<%= link_to 'remove coupan', remove_coupan_path(ab: a.id, value: @user.id) %></td>
+
+                <td style="color:purple" > -  <%= a.service.coupan.price %></td>
+              </tr>
+            
+          <% end %>
+          <% end %>
+          
+
+     <% end %>
+  
+
+
+    <tr>
+       <% sum = 0 %>
+      <td colspan='3' align="center" style="color:blue">Total Amount :  </td>
+      
+     
+        <% @user.joins.where(status: 1).pluck(:service_id).each do |a| %>
+        <% sum=sum+Service.find(a).price %>
+        <% end %> 
+        
+        <% b = 0 %>
+        <% @user.joins.where(status:1).each do |a| %>
+        <% if a.statuss == true %>
+        <% b = b + Service.find(a.service_id).coupan.price %>
+      <% end %>
+        <% end %>
+    
+       <td style="color:blue"><%= sum - b  %></td>
+    </tr>
+   
+
+ </table>
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<br><br>
+
+<table border="1" cellspacing="0" style="width:60%;height:100%" align="left" >
+ <tr><td colspan="6" align='center'> <h4 style="color:black">All Service</h4></td></tr>
+  <tr>
+     <th align="center" style="color:purple">Service name</th>
+     <th align="center" style="color:purple">vendor name</th>
+     <th align="center" style="color:purple">add service</th>
+     <td align="center" style="color:purple"> image</td>
+     <td align="center" style="color:purple"> price</td>
+      <td align="center" style="color:purple"> coupan</td>
+  </tr>
+
+  <% @services.each do |service| %>
+
+    <tr>
+      <td><%= service.name %></td>
+      <td><%= service.Vendor.name %></td>
+      <td><%= link_to 'add service', add_service_path(any: service.id, value: @user.id) %></td>
+      <td><%= image_tag(service.image.thumb.url) if service.image? %></td> 
+      <td><%= service.price %></td>
+     
+      <td> <% if service.coupan.date > Date.today %>
+         <%= service.coupan.name %> to <%= service.coupan.price %>rs.
+          <% else %>
+        <%= service.coupan.name %> to <%= service.coupan.price %>rs.<p align="center" style="color:red"> "coupan is expiry on <%= service.coupan.date.to_datetime.localtime.strftime("%d-%m-%Y") %>"</p>
+      <% end %></td>
+    
+    </tr>
+
+
+  <% end %>
+</table>
+
+

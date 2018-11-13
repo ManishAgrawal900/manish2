@@ -1,0 +1,57 @@
+
+
+<b><i><h1 align="center">Sign Up</h1></i></b>
+
+<%= form_with scope: :user, url: users_path, local: true do |form| %>
+
+
+<table  style="width:30%;height:100%" align="center">
+
+<tr><td colspan="2" align="center">
+        <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h6><%= pluralize(@user.errors.count, "error") %> prohibited this product from being saved:</h6>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+   </td></tr>
+
+
+  <tr><td align="center" style="color:blue;font-size:100%;width:10%" >
+    <i><%= form.label :Name%></i></td>
+   <td> <%= form.text_field :name, placeholder: "Enter the name" %></td>
+  </tr>
+
+ 
+ <tr><td align="center" style="color:blue;font-size:100%">
+   <i> <%= form.label :Email %></i></td>
+   <td> <%= form.text_field :email, placeholder: "Enter the email"%></td>
+  </tr>
+  
+ <tr><td align="center" style="color:blue;font-size:100%;width:10%">
+   <i> <%= form.label :Password %></i></td>
+   <td> <%= form.password_field :password , placeholder: "Enter the password" %></td>
+  </tr>
+   
+  <tr><td align="center" style="color:blue;font-size:100%;width:10%">
+    <i><%= form.label :Confirm_Paswword %></i></td>
+   <td> <%= form.password_field :password_confirmation , placeholder: "Enter the same password"%></td>
+  </tr>
+
+
+
+ <tr><td colspan="2", align="center">
+    <%= form.submit %>
+  </td></tr>
+</table>
+<% end %>
+<h3 align="center"><%= link_to 'LOGIN IN', login_path %></h3>
+
+
+
+
